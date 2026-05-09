@@ -13,7 +13,7 @@ export default function Header() {
     const fetchSuggestions = async () => {
       if (query.length > 2) {
         try {
-          const response = await fetch(`http://localhost:5001/search?q=${encodeURIComponent(query)}`);
+          const response = await fetch(`https://akima-backend-main-2.vercel.app/search?q=${encodeURIComponent(query)}`);
           const data = await response.json();
           setSuggestions(data.slice(0, 5));
           setShowSuggestions(true);
@@ -59,9 +59,9 @@ export default function Header() {
       boxShadow: '0 30px 60px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)'
     }}>
       <div style={{ width: '25%', display: 'flex', alignItems: 'center' }}>
-        <span style={{ 
-          fontSize: '1.6rem', 
-          fontWeight: 900, 
+        <span style={{
+          fontSize: '1.6rem',
+          fontWeight: 900,
           letterSpacing: '-1.5px',
           fontFamily: 'Urbanist, sans-serif',
           color: 'white',
@@ -97,7 +97,7 @@ export default function Header() {
           }}
           className="search-input"
         />
-        
+
         {showSuggestions && suggestions.length > 0 && (
           <div style={{
             position: 'absolute',
@@ -115,7 +115,7 @@ export default function Header() {
             boxShadow: '0 40px 100px rgba(0,0,0,0.6)'
           }}>
             {suggestions.map((track) => (
-              <div 
+              <div
                 key={track.videoId}
                 onClick={() => {
                   playTrack(track);
@@ -143,14 +143,14 @@ export default function Header() {
           </div>
         )}
 
-        <div 
+        <div
           onClick={() => {
             searchMusic(query);
             setShowSuggestions(false);
           }}
-          style={{ 
-            position: 'absolute', 
-            right: '4px', 
+          style={{
+            position: 'absolute',
+            right: '4px',
             top: '4px',
             background: 'rgba(255, 255, 255, 0.1)',
             width: '46px',
@@ -187,19 +187,19 @@ export default function Header() {
           transition: 'all 0.3s ease',
           color: 'white'
         }}
-        onMouseEnter={e => {
-          e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-          e.target.style.transform = 'scale(1.05)';
-        }}
-        onMouseLeave={e => {
-          e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-          e.target.style.transform = 'scale(1)';
-        }}
+          onMouseEnter={e => {
+            e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+            e.target.style.transform = 'scale(1.05)';
+          }}
+          onMouseLeave={e => {
+            e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+            e.target.style.transform = 'scale(1)';
+          }}
         >
           H
         </div>
       </div>
-      
+
       <style jsx>{`
         .search-input:focus {
           background: rgba(255, 255, 255, 0.12) !important;

@@ -19,17 +19,17 @@ export function MusicProvider({ children }) {
         setQueue(newQueue);
         setCurrentIndex(index);
       }
-      
+
       // Fetch related tracks immediately
-      fetch(`http://localhost:5001/search?q=${encodeURIComponent('related to ' + track.artist + ' ' + track.title)}`)
+      fetch(`https://akima-backend-main-2.vercel.app/search?q=${encodeURIComponent('related to ' + track.artist + ' ' + track.title)}`)
         .then(res => res.json())
         .then(data => setRelatedResults(data.slice(0, 10)))
         .catch(err => console.error("Error fetching related:", err));
 
-      const response = await fetch(`http://localhost:5001/stream?id=${track.videoId}`);
+      const response = await fetch(`https://akima-backend-main-2.vercel.app/stream?id=${track.videoId}`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      
+
       if (data.url) {
         setCurrentTrack({ ...track, streamUrl: data.url });
         setIsPlaying(true);
@@ -62,17 +62,17 @@ export function MusicProvider({ children }) {
     setRelatedResults([]); // Clear related when searching manually
     try {
       // Append "official audio" to help the backend prioritize music results
-      const searchUrl = `http://localhost:5001/search?q=${encodeURIComponent(query + ' official audio')}`;
+      const searchUrl = `https://akima-backend-main-2.vercel.app/search?q=${encodeURIComponent(query + ' official audio')}`;
       const response = await fetch(searchUrl);
       const data = await response.json();
-      
+
       // Filter out non-music content like news, shorts, movies, trailers, etc.
       const excludedKeywords = [
-        'news', 'shorts', 'movie', 'trailer', 'teaser', 'promo', 
+        'news', 'shorts', 'movie', 'trailer', 'teaser', 'promo',
         'vlog', 'interview', 'reaction', 'episode', 'review', 'press',
         '#shorts', '#dance', 'reels', 'tiktok', 'compilation', 'funny', 'fail'
       ];
-      
+
       const filteredResults = data.filter(track => {
         const title = track.title.toLowerCase();
         return !excludedKeywords.some(keyword => title.includes(keyword));
@@ -90,10 +90,10 @@ export function MusicProvider({ children }) {
   };
 
   return (
-    <MusicContext.Provider value={{ 
-      currentTrack, setCurrentTrack, 
-      isPlaying, setIsPlaying, 
-      playTrack, 
+    <MusicContext.Provider value={{
+      currentTrack, setCurrentTrack,
+      isPlaying, setIsPlaying,
+      playTrack,
       playNext, playPrevious,
       searchResults, setSearchResults,
       relatedResults,
