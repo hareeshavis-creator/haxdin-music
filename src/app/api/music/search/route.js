@@ -9,9 +9,13 @@ export async function GET(request) {
   }
 
   try {
-    // construction of the search URL - Using env variable for deployment
-    const backendUrl = process.env.MUSIC_BACKEND_URL || 'http://localhost:5001';
+    // SMART TOGGLE: Use local for dev, Vercel for production
+    const isDev = process.env.NODE_ENV === 'development';
+    const defaultBackend = isDev ? 'http://localhost:5001' : 'https://music-backend-kappa-two.vercel.app';
+    const backendUrl = process.env.MUSIC_BACKEND_URL || defaultBackend;
+    
     const searchUrl = `${backendUrl}/search?q=${encodeURIComponent(query)}`;
+    
     const response = await fetch(searchUrl);
     
     if (!response.ok) {
@@ -24,7 +28,7 @@ export async function GET(request) {
       return NextResponse.json([]);
     }
 
-    // Filter logic moved to backend for cleaner architecture
+    // Professional music filtering
     const excludedKeywords = [
       'news', 'shorts', 'movie', 'trailer', 'teaser', 'promo',
       'vlog', 'interview', 'reaction', 'episode', 'review', 'press',
@@ -36,16 +40,9 @@ export async function GET(request) {
       return !excludedKeywords.some(keyword => title.includes(keyword));
     });
 
-    // Ensure we have enough results if possible
-    if (filteredResults.length > 0 && filteredResults.length < 20 && data.length >= 20) {
-      const missingCount = 20 - filteredResults.length;
-      const remaining = data.filter(track => !filteredResults.some(f => f.videoId === track.videoId));
-      filteredResults = [...filteredResults, ...remaining.slice(0, missingCount)];
-    }
-
-    return NextResponse.json(filteredResults);
+    return NextResponse.json(filteredResults.slice(0, 20));
   } catch (error) {
-    console.error("Music Search API Error:", error);
-    return NextResponse.json({ error: 'Failed to fetch music' }, { status: 500 });
+    console.error("Music Search Error:", error);
+    return NextResponse.json({ error: 'Search failed' }, { status: 500 });
   }
 }

@@ -10,9 +10,16 @@ export default function Hero() {
   const [centerIndex, setCenterIndex] = useState(2);
 
   useEffect(() => {
-    fetch('http://localhost:5001/search?q=billboard hot 100')
+    fetch('/api/music/search?q=billboard hot 100')
       .then(res => res.json())
-      .then(data => setTrending(data.slice(0, 10)));
+      .then(data => {
+        if (Array.isArray(data)) {
+          setTrending(data.slice(0, 10));
+        } else {
+          setTrending([]);
+        }
+      })
+      .catch(() => setTrending([]));
   }, []);
 
   const displayData = relatedResults.length > 0 ? relatedResults : (searchResults.length > 0 ? searchResults : trending);

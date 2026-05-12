@@ -17,16 +17,19 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [trendingRes, newRes] = await Promise.all([
-          fetch('http://localhost:5001/search?q=trending music'),
-          fetch('http://localhost:5001/search?q=new music releases 2026')
+        const [trendingRes, newReleasesRes] = await Promise.all([
+          fetch('/api/music/search?q=trending music'),
+          fetch('/api/music/search?q=new music releases 2026')
         ]);
         
         const trendingData = await trendingRes.json();
-        const newData = await newRes.json();
+        const newData = await newReleasesRes.json();
         
         if (Array.isArray(trendingData)) setTrending(trendingData.slice(0, 10));
+        else setTrending([]);
+        
         if (Array.isArray(newData)) setNewReleases(newData.slice(0, 5));
+        else setNewReleases([]);
       } catch (error) {
         console.error("Error fetching music:", error);
       } finally {

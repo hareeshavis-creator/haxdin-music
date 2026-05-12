@@ -9,5 +9,4 @@ services:
       - key: NODE_VERSION
         value: 20.x
       - key: MUSIC_BACKEND_URL
-        sync: false
-        placeholder: "Enter your external music backend URL here (e.g. https://your-backend.render.com)"
+        value: "https://music-backend-kappa-two.vercel.app"
