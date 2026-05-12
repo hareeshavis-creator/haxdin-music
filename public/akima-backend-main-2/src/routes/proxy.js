@@ -86,7 +86,24 @@ router.get('/', async (req, res) => {
         });
     };
 
+    const extractWithYtdlCore = async (id) => {
+        try {
+            const ytdl = require('@distube/ytdl-core');
+            logger.info('Proxy: Attempting ytdl-core', { videoId: id });
+            const info = await ytdl.getInfo(id);
+            const format = ytdl.chooseFormat(info.formats, { filter: 'audioonly' });
+            if (format && format.url) {
+                logger.info('Proxy: ytdl-core OK', { videoId: id });
+                return format.url;
+            }
+        } catch (err) {
+            logger.error('Proxy: ytdl-core error', { error: err.message });
+        }
+        return null;
+    };
+
     const strategies = [
+        { name: 'ytdl-core', run: () => extractWithYtdlCore(videoId), ua: UA },
         { name: 'local-cookies', run: () => extractWithYtdlp(false), ua: UA },
         { name: 'local-android', run: () => extractWithYtdlp(true), ua: 'com.google.android.youtube/19.05.36 (Linux; Android 14; Pixel 8 Pro)' },
         { name: 'invidious-scrape', run: () => scrapeInvidious(videoId), ua: UA }

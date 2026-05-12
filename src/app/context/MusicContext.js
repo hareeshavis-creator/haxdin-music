@@ -20,24 +20,20 @@ export function MusicProvider({ children }) {
         setCurrentIndex(index);
       }
 
-      // Fetch related tracks immediately
-      fetch(`https://akima-backend-main-2.vercel.app/search?q=${encodeURIComponent('related to ' + track.artist + ' ' + track.title)}`)
-        .then(res => res.json())
-        .then(data => setRelatedResults(data.slice(0, 10)))
-        .catch(err => console.error("Error fetching related:", err));
+      // Fetch related tracks from our new BACKEND API
+      fetch(`/api/music/related?artist=${encodeURIComponent(track.artist)}&title=${encodeURIComponent(track.title)}`)
+        .then(res => res.ok ? res.json() : [])
+        .then(data => setRelatedResults(data))
+        .catch(err => {
+          console.error("Related tracks fetch failed:", err);
+          setRelatedResults([]);
+        });
 
-      const response = await fetch(`https://akima-backend-main-2.vercel.app/stream?id=${track.videoId}`);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
-
-      if (data.url) {
-        setCurrentTrack({ ...track, streamUrl: data.url });
-        setIsPlaying(true);
-      } else {
-        throw new Error("No stream URL returned from server");
-      }
+      setCurrentTrack(track);
+      setIsPlaying(true);
+      
     } catch (error) {
-      console.error("Error fetching stream:", error);
+      console.error("Error setting track:", error);
       setIsPlaying(false);
     }
   };
@@ -59,31 +55,20 @@ export function MusicProvider({ children }) {
   const searchMusic = async (query) => {
     if (!query) return;
     setIsSearching(true);
-    setRelatedResults([]); // Clear related when searching manually
+    setRelatedResults([]); 
     try {
-      // Append "official audio" to help the backend prioritize music results
-      const searchUrl = `https://akima-backend-main-2.vercel.app/search?q=${encodeURIComponent(query + ' official audio')}`;
-      const response = await fetch(searchUrl);
-      const data = await response.json();
+      // Call our new BACKEND API instead of the external one directly
+      const response = await fetch(`/api/music/search?q=${encodeURIComponent(query + ' official audio')}`);
+      const filteredResults = await response.json();
 
-      // Filter out non-music content like news, shorts, movies, trailers, etc.
-      const excludedKeywords = [
-        'news', 'shorts', 'movie', 'trailer', 'teaser', 'promo',
-        'vlog', 'interview', 'reaction', 'episode', 'review', 'press',
-        '#shorts', '#dance', 'reels', 'tiktok', 'compilation', 'funny', 'fail'
-      ];
-
-      const filteredResults = data.filter(track => {
-        const title = track.title.toLowerCase();
-        return !excludedKeywords.some(keyword => title.includes(keyword));
-      });
-
-      setSearchResults(filteredResults);
+      setSearchResults(Array.isArray(filteredResults) ? filteredResults : []);
+      
       if (typeof window !== 'undefined') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } catch (error) {
       console.error("Search error:", error);
+      setSearchResults([]);
     } finally {
       setIsSearching(false);
     }

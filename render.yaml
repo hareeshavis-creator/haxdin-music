@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: melora-music-platform
+    env: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.x
+      - key: MUSIC_BACKEND_URL
+        sync: false
+        placeholder: "Enter your external music backend URL here (e.g. https://your-backend.render.com)"

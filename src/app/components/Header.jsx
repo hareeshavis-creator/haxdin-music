@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import { Search, User, Bell, Radio, Music2, Library, Compass } from 'lucide-react';
+import { Search, Bell, Menu } from 'lucide-react';
 import { useMusic } from '../context/MusicContext';
 
 export default function Header() {
@@ -43,76 +43,130 @@ export default function Header() {
       left: '50%',
       transform: 'translateX(-50%)',
       width: '92%',
-      maxWidth: '1300px',
-      height: '80px',
+      maxWidth: '1100px',
+      height: '76px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '0 40px',
+      padding: '0 20px',
       zIndex: 1000,
-      background: 'rgba(255, 255, 255, 0.02)',
-      backdropFilter: 'var(--apple-blur)',
-      WebkitBackdropFilter: 'var(--apple-blur)',
+      background: 'rgba(20, 15, 25, 0.4)',
+      backdropFilter: 'blur(24px)',
+      WebkitBackdropFilter: 'blur(24px)',
       borderRadius: '100px',
-      border: '1px solid var(--glass-border)',
-      borderTop: '1px solid rgba(255, 255, 255, 0.3)',
-      boxShadow: '0 30px 60px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)'
+      border: '1px solid rgba(255, 255, 255, 0.04)',
+      boxShadow: '0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(140, 122, 246, 0.08), inset 0 1px 0 rgba(255,255,255,0.05)'
     }}>
-      <div style={{ width: '25%', display: 'flex', alignItems: 'center' }}>
-        <span style={{
-          fontSize: '1.6rem',
-          fontWeight: 900,
-          letterSpacing: '-1.5px',
-          fontFamily: 'Urbanist, sans-serif',
+      {/* LEFT: Logo & Brand */}
+      <div style={{ width: '25%', display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <div style={{
+          width: '44px',
+          height: '44px',
+          borderRadius: '50%',
+          background: 'rgba(140, 122, 246, 0.05)',
+          border: '1px solid rgba(140, 122, 246, 0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           color: 'white',
-          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
-        }}>Haxdin</span>
+          fontWeight: 800,
+          fontSize: '1.2rem',
+          boxShadow: '0 0 15px rgba(140, 122, 246, 0.15), inset 0 0 10px rgba(140, 122, 246, 0.1)',
+          fontFamily: 'Inter, sans-serif'
+        }}>
+          H
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <span style={{ color: 'white', fontWeight: 500, fontSize: '1.1rem', letterSpacing: '-0.3px', lineHeight: '1.2' }}>Haxdin</span>
+          <span style={{ color: '#b4a8ff', fontSize: '0.75rem', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '4px', opacity: 0.9 }}>
+            Premium <span style={{ fontSize: '0.8rem' }}>✦</span>
+          </span>
+        </div>
       </div>
 
+      {/* MIDDLE: Search Bar */}
       <div style={{
         flex: 1,
-        maxWidth: '600px',
+        maxWidth: '520px',
         position: 'relative'
       }}>
-        <input
-          type="text"
-          placeholder={isSearching ? "Searching..." : "Search artists, songs, podcasts..."}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-          onFocus={() => query.length > 2 && setShowSuggestions(true)}
-          style={{
-            width: '100%',
-            height: '54px',
-            padding: '0 60px 0 30px',
-            borderRadius: '100px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            color: 'white',
-            outline: 'none',
-            fontSize: '1rem',
-            transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-            boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.05)'
-          }}
-          className="search-input"
-        />
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          background: 'rgba(255, 255, 255, 0.02)',
+          border: '1px solid rgba(255, 255, 255, 0.06)',
+          borderRadius: '100px',
+          height: '50px',
+          padding: '0 6px 0 20px',
+          transition: 'all 0.3s ease',
+          boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.1)'
+        }}
+        className="search-container"
+        >
+          <Search size={18} color="rgba(255,255,255,0.4)" strokeWidth={2} />
+          
+          <input
+            type="text"
+            placeholder={isSearching ? "Searching..." : "Search artists, songs, podcasts..."}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+            onFocus={() => query.length > 2 && setShowSuggestions(true)}
+            style={{
+              flex: 1,
+              background: 'transparent',
+              border: 'none',
+              color: 'white',
+              outline: 'none',
+              fontSize: '0.9rem',
+              padding: '0 12px',
+              fontFamily: 'inherit',
+              fontWeight: 400
+            }}
+            className="search-input"
+          />
+
+          <div
+            onClick={() => {
+              searchMusic(query);
+              setShowSuggestions(false);
+            }}
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              background: 'transparent',
+              border: '1px solid rgba(140, 122, 246, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              opacity: query ? 1 : 0.6,
+              pointerEvents: query ? 'all' : 'none',
+              boxShadow: '0 0 10px rgba(140, 122, 246, 0.1), inset 0 0 8px rgba(140, 122, 246, 0.1)'
+            }}
+            className="search-btn"
+          >
+            <Search size={16} color="rgba(255,255,255,0.8)" strokeWidth={2} />
+          </div>
+        </div>
 
         {showSuggestions && suggestions.length > 0 && (
           <div style={{
             position: 'absolute',
-            top: '65px',
+            top: '60px',
             left: '0',
             right: '0',
-            background: 'rgba(255, 255, 255, 0.02)',
-            backdropFilter: 'var(--apple-blur)',
-            WebkitBackdropFilter: 'var(--apple-blur)',
+            background: 'rgba(20, 15, 25, 0.8)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
             borderRadius: '24px',
-            border: '1px solid var(--glass-border)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-            padding: '10px',
+            border: '1px solid rgba(255,255,255,0.05)',
+            padding: '8px',
             zIndex: 2000,
-            boxShadow: '0 40px 100px rgba(0,0,0,0.6)'
+            boxShadow: '0 20px 40px rgba(0,0,0,0.6)'
           }}>
             {suggestions.map((track) => (
               <div
@@ -127,7 +181,7 @@ export default function Header() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '15px',
-                  padding: '12px',
+                  padding: '10px',
                   borderRadius: '16px',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
@@ -135,80 +189,61 @@ export default function Header() {
               >
                 <img src={track.thumbnail} style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} />
                 <div style={{ flex: 1, overflow: 'hidden' }}>
-                  <div style={{ color: 'white', fontWeight: 600, fontSize: '0.95rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{track.title}</div>
-                  <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem' }}>{track.artist}</div>
+                  <div style={{ color: 'white', fontWeight: 500, fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{track.title}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem' }}>{track.artist}</div>
                 </div>
               </div>
             ))}
           </div>
         )}
-
-        <div
-          onClick={() => {
-            searchMusic(query);
-            setShowSuggestions(false);
-          }}
-          style={{
-            position: 'absolute',
-            right: '4px',
-            top: '4px',
-            background: 'rgba(255, 255, 255, 0.1)',
-            width: '46px',
-            height: '46px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            opacity: query ? 1 : 0.5,
-            transition: 'all 0.4s ease',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            pointerEvents: query ? 'all' : 'none'
-          }}
-        >
-          <Search size={20} color="white" strokeWidth={2.5} />
-        </div>
       </div>
 
-      <div style={{ width: '25%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '30px' }}>
-        <Bell size={24} color="white" style={{ cursor: 'pointer', opacity: 0.8, transition: 'opacity 0.3s' }} onMouseEnter={e => e.target.style.opacity = 1} onMouseLeave={e => e.target.style.opacity = 0.8} />
+      {/* RIGHT: Actions */}
+      <div style={{ width: '25%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '20px' }}>
+        <div style={{ position: 'relative', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} className="bell-icon">
+          <Bell size={22} color="rgba(255,255,255,0.8)" strokeWidth={1.5} />
+          <div style={{ position: 'absolute', top: '-2px', right: '0px', width: '6px', height: '6px', background: '#b4a8ff', borderRadius: '50%', boxShadow: '0 0 6px #b4a8ff' }} />
+        </div>
+        
         <div style={{
-          width: '46px',
-          height: '46px',
+          width: '44px',
+          height: '44px',
           borderRadius: '50%',
-          background: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
+          background: 'rgba(255, 255, 255, 0.03)',
+          border: '1px solid rgba(255, 255, 255, 0.05)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontWeight: 800,
-          fontSize: '1rem',
           cursor: 'pointer',
-          transition: 'all 0.3s ease',
-          color: 'white'
+          transition: 'all 0.2s ease',
         }}
-          onMouseEnter={e => {
-            e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-            e.target.style.transform = 'scale(1.05)';
-          }}
-          onMouseLeave={e => {
-            e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-            e.target.style.transform = 'scale(1)';
-          }}
+        className="menu-btn"
         >
-          H
+          <Menu size={20} color="rgba(255,255,255,0.8)" strokeWidth={1.5} />
         </div>
       </div>
 
       <style jsx>{`
-        .search-input:focus {
-          background: rgba(255, 255, 255, 0.12) !important;
-          border-color: white !important;
-          box-shadow: 0 0 30px var(--accent-glow) !important;
+        .search-input::placeholder {
+          color: rgba(255,255,255,0.4);
+        }
+        .search-container:focus-within {
+          background: rgba(255, 255, 255, 0.04) !important;
+          border-color: rgba(140, 122, 246, 0.2) !important;
+          box-shadow: 0 0 20px rgba(140, 122, 246, 0.1), inset 0 2px 10px rgba(0,0,0,0.1) !important;
+        }
+        .search-btn:hover {
+          background: rgba(140, 122, 246, 0.15) !important;
+        }
+        .menu-btn:hover {
+          background: rgba(255, 255, 255, 0.08) !important;
+          border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        .bell-icon:hover {
+          opacity: 1 !important;
         }
         .suggestion-item:hover {
-          background: rgba(255, 255, 255, 0.1);
-          transform: translateX(5px);
+          background: rgba(255, 255, 255, 0.04);
         }
       `}</style>
     </header>

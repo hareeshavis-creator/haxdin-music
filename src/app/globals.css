@@ -35,7 +35,7 @@ body::before {
   right: -10%;
   width: 60vw;
   height: 60vw;
-  background: radial-gradient(circle, rgba(183, 148, 244, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(180, 168, 255, 0.15) 0%, transparent 70%);
   z-index: -1;
   filter: blur(100px);
   pointer-events: none;

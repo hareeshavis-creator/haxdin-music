@@ -25,8 +25,8 @@ export default function Home() {
         const trendingData = await trendingRes.json();
         const newData = await newRes.json();
         
-        setTrending(trendingData.slice(0, 10));
-        setNewReleases(newData.slice(0, 5));
+        if (Array.isArray(trendingData)) setTrending(trendingData.slice(0, 10));
+        if (Array.isArray(newData)) setNewReleases(newData.slice(0, 5));
       } catch (error) {
         console.error("Error fetching music:", error);
       } finally {
@@ -53,39 +53,16 @@ export default function Home() {
           <IsometricStack tracks={trending} title="Trending Now" />
         )}
 
-        {/* New Releases Section */}
-        <section style={{ padding: '40px 0' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>New Releases</h2>
-            <button 
-              onClick={() => searchMusic('new releases 2026')}
-              style={{ background: 'none', border: 'none', color: 'var(--accent-primary)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}
-            >
-              See All <ChevronRight size={18} />
-            </button>
-          </div>
-          <div className="music-grid">
-            {loading ? (
-              [1, 2, 3, 4, 5].map(i => <div key={i} className="glass-card" style={{ height: '250px', animate: 'pulse' }} />)
-            ) : (
-              newReleases.map((track, i) => (
-                <div key={i} onClick={() => playTrack(track, newReleases, i)}>
-                  <TrackCard title={track.title} artist={track.artist} image={track.thumbnail} />
-                </div>
-              ))
-            )}
-          </div>
-        </section>
 
         {/* Categories / Genres (Moved Down) */}
         <section style={{ padding: '80px 0', marginTop: '40px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px' }}>
             {[
-              { name: 'Malayalam', icon: <Music size={24} /> },
-              { name: 'Tamil', icon: <Disc size={24} /> },
-              { name: 'Hindi', icon: <Mic2 size={24} /> },
-              { name: 'English', icon: <Star size={24} /> },
-              { name: 'Phonk', icon: <Play size={24} /> },
+              { name: 'Malayalam' },
+              { name: 'Tamil' },
+              { name: 'Hindi' },
+              { name: 'English' },
+              { name: 'Phonk' },
             ].map((genre, i) => (
               <motion.div
                 key={i}
@@ -114,7 +91,6 @@ export default function Home() {
                   boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
                 }}
               >
-                <div style={{ color: 'white', opacity: 0.9 }}>{genre.icon}</div>
                 <span style={{ color: 'white', fontWeight: 700, fontSize: '1rem', letterSpacing: '0.5px' }}>{genre.name}</span>
               </motion.div>
             ))}
@@ -126,13 +102,15 @@ export default function Home() {
       <footer className="container" style={{ padding: '100px 0', borderTop: '1px solid var(--glass-border)', textAlign: 'center' }}>
         <div style={{ marginBottom: '40px' }}>
           <h3 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '10px' }}>Haxdin</h3>
-          <p style={{ color: 'var(--text-dim)' }}>The future of sound is here.</p>
+          <p style={{ color: 'var(--text-dim)', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
+            My name is Harry. This is the first website I’ve ever created, inspired by my love for music and my favorite lavender aesthetic.
+          </p>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', color: 'var(--text-dim)', fontSize: '0.9rem' }}>
-          <a href="#">About</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Support</a>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', fontSize: '0.9rem' }}>
+          <a href="#" style={{ color: '#b4a8ff', textDecoration: 'none', transition: 'opacity 0.3s' }} onMouseOver={(e) => e.target.style.opacity = '0.7'} onMouseOut={(e) => e.target.style.opacity = '1'}>About</a>
+          <a href="#" style={{ color: '#b4a8ff', textDecoration: 'none', transition: 'opacity 0.3s' }} onMouseOver={(e) => e.target.style.opacity = '0.7'} onMouseOut={(e) => e.target.style.opacity = '1'}>Privacy Policy</a>
+          <a href="#" style={{ color: '#b4a8ff', textDecoration: 'none', transition: 'opacity 0.3s' }} onMouseOver={(e) => e.target.style.opacity = '0.7'} onMouseOut={(e) => e.target.style.opacity = '1'}>Terms of Service</a>
+          <a href="#" style={{ color: '#b4a8ff', textDecoration: 'none', transition: 'opacity 0.3s' }} onMouseOver={(e) => e.target.style.opacity = '0.7'} onMouseOut={(e) => e.target.style.opacity = '1'}>Support</a>
         </div>
         <p style={{ marginTop: '40px', fontSize: '0.8rem', color: 'rgba(255,255,255,0.2)' }}>© 2026 Haxdin Inc. All rights reserved.</p>
       </footer>
