@@ -19,6 +19,18 @@ export default function MusicPlayer() {
   const [isLiked, setIsLiked] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showChatLabel, setShowChatLabel] = useState(false);
+  const [deviceName, setDeviceName] = useState('This Device');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const ua = navigator.userAgent;
+      if (/iPhone/.test(ua)) setDeviceName('This iPhone');
+      else if (/iPad/.test(ua)) setDeviceName('This iPad');
+      else if (/Android/.test(ua)) setDeviceName('This Android');
+      else if (/Macintosh/.test(ua)) setDeviceName('MacBook Pro');
+      else if (/Windows/.test(ua)) setDeviceName('Windows PC');
+    }
+  }, []);
 
   useEffect(() => {
     if (currentTrack) setIsLoading(true);
@@ -226,7 +238,7 @@ export default function MusicPlayer() {
               <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', textAlign: 'center' }}>
                 <p style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>Playing From</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'white', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer' }}>
-                  Haxdin's Library <ChevronDown size={14} color="#b4a8ff" />
+                  {deviceName} <ChevronDown size={14} color="#b4a8ff" />
                 </div>
               </div>
 
@@ -242,7 +254,7 @@ export default function MusicPlayer() {
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
               
               {/* LEFT: Album Art & Minimal Vinyl */}
-              <div style={{ width: '30%', display: 'flex', justifyContent: 'center', position: 'relative' }}>
+              <div style={{ width: '30%', display: 'flex', justifyContent: 'center', position: 'relative', marginLeft: '-40px' }}>
                 <div style={{ position: 'relative' }}>
                   {/* Minimal Vinyl Record */}
                   <div style={{
@@ -526,7 +538,7 @@ export default function MusicPlayer() {
                   <Headphones size={22} color="white" />
                 </div>
                 <div>
-                  <p style={{ color: '#d4ccff', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>Haxdin's AirPods Pro <ChevronDown size={14} /></p>
+                  <p style={{ color: '#d4ccff', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>{deviceName} <ChevronDown size={14} /></p>
                   <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
                     <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} /> Connected
                   </p>
